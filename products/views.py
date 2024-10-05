@@ -11,6 +11,8 @@ from rest_framework.parsers import JSONParser
 from django.http import JsonResponse
 from django.db import IntegrityError
 from django.contrib.auth.models import User
+from django_filters.rest_framework import DjangoFilterBackend
+from .filters import ProductFilter
 
 class ProductPagination(PageNumberPagination):
     page_size = 3
@@ -28,7 +30,8 @@ class ProductListCreateView(generics.ListCreateAPIView):
     serializer_class = ProductSerializer
     permission_classes=[permissions.IsAuthenticatedOrReadOnly]
     pagination_class = ProductPagination
-    filter_backends = [SearchFilter,OrderingFilter]
+    filter_backends = [SearchFilter,OrderingFilter,DjangoFilterBackend]
+    filterset_class=ProductFilter
     search_fields = ['name'] 
     ordering_fields = ['price', 'stock', 'created_at']
 
